@@ -17,10 +17,10 @@ Jeweler::Tasks.new do |gem|
   gem.name = "ruby-birdwatching"
   gem.homepage = "http://github.com/syrnick/ruby-birdwatching"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
-  gem.email = "alex@crowdflower.com"
-  gem.authors = ["Alex Sorokin"]
+  gem.summary = %Q{Simple tools to figure out where to go birding}
+  gem.description = %Q{We use this gem to fetch data from eBird, classify observations of birds we haven't seen and figure out where to go birding. We keep a google map with regions of interest that we use to group the observations.}
+  gem.email = "syrnick@gmail.com"
+  gem.authors = ["Alexander Sorokin"]
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
