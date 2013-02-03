@@ -9,31 +9,35 @@ to visit next.
 
  1. First of all, some preparation:
  
-         gem install nokogiri
-         gem install fastercsv
-         gem install yaml
-         gem install clipper
+         install ruby (I generally recommend using rbenv and ruby 1.9.3)
+         bundle install
     
- 1. Then you need a map with regions you are interested in. Google maps work
-great for this. Here's an example of our map for Bay Area:
+ 1. Then you need a map with regions you are interested in. Google
+    maps work great for this. Here's an example of our map for Bay Area:
+ 
 http://maps.google.com/maps/ms?ie=UTF8&hl=en&msa=0&msid=202933467189883314896.00049912d6823abb690f2&ll=37.637072,-122.276459&spn=0.494809,1.126099&t=h&z=10
 
     You can create your own map and draw your regions on it. The planner will collect all alerts within each region.
 
- 1. When you are done, you will need a KML file for that map. Look for KML link above the map on the right. Copy the URL. It should look something like this:
+ 1. When you are done, you will need a KML file for that map. Look for
+    KML link above the map on the right. Copy the URL. It should look
+    something like this:
+ 
 http://maps.google.com/maps/ms?ie=UTF8&hl=en&t=h&msa=0&output=kml&msid=202933467189883314896.00049912d6823abb690f2
+
+ 1. Create a file with your latitude and longitude. By default, we will use file "data/home.yml". 
+ 
+        :lat: 37.553866
+        :long: -122.258992
  
  1. Now we can generate our landmarks file from this feed. Run:
-    
-    
-         ruby google_map_to_landmarks.rb "Your KML URL >landmarks.yml
-     
-    e.g.
-     
-         ruby google_map_to_landmarks.rb 'http://maps.google.com/maps/ms?authuser=0&vps=2&ie=UTF8&msa=0&output=kml&msid=202933467189883314896.00049a04d9feb0cc487f6' >landmarks.yml
-     
- 1. Create the list of counties that you are interested in. See counties.yml for an example.
  
+         bundle exec ruby -I lib lib/google_map_to_landmarks.rb 'Your KML URL in quotes' >data/landmarks.yml
+         
+    e.g.
+    
+         bundle exec ruby -I lib lib/google_map_to_landmarks.rb 'http://maps.google.com/maps/ms?authuser=0&vps=2&ie=UTF8&msa=0&output=kml&msid=202933467189883314896.00049a04d9feb0cc487f6' >landmarks.yml
+     
  1. Now we need the alerts from eBird. Login to eBird.org and go to
     http://ebird.org/ebird/alerts. Choose your state and click view.
     Save this page as HTML only. In Chrome, choose File/Save as. Then
@@ -43,19 +47,22 @@ http://maps.google.com/maps/ms?ie=UTF8&hl=en&t=h&msa=0&output=kml&msid=202933467
     
  1. Now we can run the planner:
     
-    ruby birdwatching_planner.rb alerts_05_jan_2011.html landmarks.yml counties.yml >birds.csv
+    bundle exec ruby -I lib/ lib/planner.rb data/life_list.csv data/BIRDING_MAP.yaml data/locations-US-CA.json plan.csv
+
+ 1. BOOM! We got a CSV file (plan.csv) with all alerts nicely grouped
+    by the regions that we outlined on the google map. 
     
- This created a CSV (birds.csv) with all alerts nicely grouped by the
- regions that we outlined on the google map. Open it with Excel and have fun! 
+    Open it with Excel and have fun!
  
- Happy birdwatching!
- 
+Happy birdwatching!
+
+
 
 h2. One more time:
 
  1. Get the map
 
-    be ruby -I lib lib/google_map_to_landmarks.rb  >map.yaml
+    bundle exec ruby -I lib lib/google_map_to_landmarks.rb  >map.yaml
 
  1. Get the lifelist
 
@@ -68,6 +75,6 @@ h2. One more time:
 
  1. Run the planner
 
-    be ruby -I lib/ lib/birdwatching_planner_v2.rb livelist.csv map.yaml locations-US-CA.json plan.csv
+   bundle exec ruby -I lib/ lib/planner.rb data/life_list.csv data/BIRDING_MAP.yaml data/locations-US-CA.json plan.csv
 
-BOOM!
+ 1. BOOM!
