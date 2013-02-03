@@ -1,6 +1,4 @@
-require 'rubygems'
 require 'httparty'
-require 'fastercsv'
 
 module Birdwatching
   module EBird
@@ -20,10 +18,35 @@ module Birdwatching
         response
       end
 
-      def self.all_near_locations( locations, radius )
+      def self.query_locations( locations, radius )
         all_observations = locations.map {|loc|
           self.get( loc[:long], loc[:lat], radius )
         }.flatten.uniq
+      end
+
+      def self.all_near_location( my_location, max_distance )
+        use_grid = true
+        locations = []
+        if use_grid
+          dlat=0.65
+          dlong=0.85
+          (-1..1).each do |la|
+            (-1..1).each do |lo|
+              locations << { :lat => my_location[:lat] + dlat * la , :long => my_location[:long] + dlong *lo }
+            end
+          end
+        else
+          locations = [my_location]
+        end
+
+        radius = 50
+        observations = query_locations( locations, radius )
+
+        observations.reject! do |loc|
+          Birdwatching::Geometry::GeoDistance.geo_distance(loc["lat"], loc["lng"], my_location[:lat], my_location[:long]) > max_distance
+        end
+        p "Got #{observations.size} observations in #{max_distance} kilometers (#{(max_distance / 1.609344).to_i} miles)"
+        observations
       end
     end
   end
